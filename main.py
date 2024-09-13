@@ -28,7 +28,17 @@ def scene(number):
                 number = number + 1
     
     if number == 2:
-        print(f"{player.name} meets chicken!")
+
+        print(f"{player.name} meet a chicken!")
+    
+    if number == 3:
+        print(f"Whilst {player.action} you stumble upon a monkey")
+        time.sleep(1)
+        current_conversation = True
+        while current_conversation:
+            subcommand = input("What will you say to it?: ")
+            print(f"OhOaHHAAaa")
+            
 
 
 # persons
