@@ -110,11 +110,11 @@ while run:
 
             if admin:
                 if command.startswith("hurt"):
-                    hurt = re.findall("\d", command)
+                    hurt = re.findall(r"\d", command)
                     hurt = tools.convert_to_string(hurt)
                     print(hurt)
                 if command.startswith("heal") and command != "health":
-                    heal = re.findall("\d", command)
+                    heal = re.findall(r"\d", command)
                     heal = tools.convert_to_string(heal)
                     print(heal)
 
