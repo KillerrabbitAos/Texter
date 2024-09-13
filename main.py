@@ -38,8 +38,8 @@ Alex = tools.Person("steve", 12, "school", 100, ["Steve", player.name], [],
                     "unknown", "doing nothing")
 
 # locations
-school = tools.Location(True, True)
-
+school = tools.Location(False, True)
+places = ["school"]
 # indicators
 indicator = "█░"
 
@@ -102,9 +102,13 @@ while run:
             if choice:
                 Steve.location = player.location
             if command.startswith("walk to"):
-                player.location = (command.split()[2])
-                player.action = f"walking to {player.location}"
-                print(f"You began walking to {player.location}")
+                place = (command.split()[2])
+                if place in places:
+                    print(f"You began walking to {place}")
+                    player.action = f"Walking to {player.location}"
+                    player.location = place
+                else:
+                    player.action = f"Looking for {player.location}"
 
             if Steve.location == player.location:
                 current_conversation = tools.Conversation([Steve])
@@ -141,6 +145,7 @@ while run:
 
             player.health = player.health - int(hurt)
             player.health = player.health + int(heal)
+            
             if player.location == "School":
                 school.Player_Presence = True
                 print("you are now at school")
