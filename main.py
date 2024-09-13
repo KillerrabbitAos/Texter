@@ -30,6 +30,7 @@ def scene(number):
     if number == 2:
 
         print(f"{player.name} meet a chicken!")
+        number = number + 1
     
     if number == 3:
         print(f"Whilst {player.action} you stumble upon a monkey")
