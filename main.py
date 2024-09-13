@@ -17,7 +17,7 @@ adminRounds = 0
 def scene(number):
     import time
     if number == 1:
-        print(f"Whilst {action} you stumble upon Mr. Pancake")
+        print(f"Whilst {player.action} you stumble upon Mr. Pancake")
         time.sleep(1)
         current_conversation = True
         while current_conversation:
