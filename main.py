@@ -38,7 +38,7 @@ Alex = tools.Person("steve", 12, "school", 100, ["Steve", player.name], [],
                     "unknown", "doing nothing")
 
 # locations
-school = tools.Location(False, True)
+school = tools.Location(True, True)
 places = ["school"]
 # indicators
 indicator = "█░"
@@ -147,6 +147,9 @@ while run:
             player.health = player.health + int(heal)
             
             if player.location == "School":
-                school.Player_Presence = True
-                print("you are now at school")
+                if school.Player_Presence == True:
+                    print("You are already at school.")
+                else:
+                    school.Player_Presence = True
+                    print("you are now at school")
 
