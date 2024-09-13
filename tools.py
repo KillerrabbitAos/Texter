@@ -34,23 +34,6 @@ class Conversation:
         self.members = members
 
 
-def scene(number, action, player_name, player_location):
-    import time
-    if number == 1:
-        print(f"Whilst {action} you stumble upon Mr. Pancake")
-        time.sleep(1)
-        
-    
-        current_conversation = True
-        while current_conversation:
-            subcommand = input("What will you say to Mr. Pancake?: ")
-            print(f"{subcommand} to you too {player_name}!")
-            if subcommand.lower() == "hello":
-                current_conversation = False
-    
-    if number == 2:
-        print(f"{player.name} meets chicken!")
-
 def draw(txt, totalTime: int, wait):
     import time
     for character in txt:

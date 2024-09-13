@@ -13,6 +13,24 @@ admin = False
 haveBeenAdmin = False
 adminRounds = 0
 
+
+def scene(number):
+    import time
+    if number == 1:
+        print(f"Whilst {action} you stumble upon Mr. Pancake")
+        time.sleep(1)
+        current_conversation = True
+        while current_conversation:
+            subcommand = input("What will you say to Mr. Pancake?: ")
+            print(f"{subcommand} to you too {player.name}!")
+            if subcommand.lower() == "hello":
+                current_conversation = False
+                number = number + 1
+    
+    if number == 2:
+        print(f"{player.name} meets chicken!")
+
+
 # persons
 player = tools.Person("steve", 12, "school", 100, ["steve", "Alex"], [], "unknown", "doing nothing")
 Steve = tools.Person("steve", 12, "home", 100, ["Alex", player.name], [], "unknown", "doing nothing")
@@ -105,7 +123,7 @@ while run:
                 else:
                     print("no")
 
-            tools.scene(current_scene, player.action, player.name, player.location)
+            scene(current_scene)
 
 
             if admin:
@@ -126,3 +144,4 @@ while run:
             if player.location == "School":
                 school.Player_Presence = True
                 print("you are now at school")
+
