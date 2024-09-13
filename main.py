@@ -38,7 +38,7 @@ def scene(number):
         current_conversation = True
         while current_conversation:
             subcommand = input("What will you say to it?: ")
-            print(f"OhOaHHAAaa")
+            print(f"OhohAHAh")
             
 
 
