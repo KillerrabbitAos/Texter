@@ -5,10 +5,19 @@ import os
 def clear():
     return os.system("clear")
 
+class thing:
+    def __init__(self, image=""":)"""):
+        self.image = image
+
 class Container:
-    def __init__(self, items, size):
+    def __init__(self, items: dict, size: int):
         self.items = items
         self.size = size
+        
+class menu(thing):
+    def __init__(self, items=["A menu:)"]):
+        self.items = items
+        pass
         
 class location:
     def __init__(self, isAvailable: bool, things=["nothing",], name="random place"):
@@ -18,10 +27,49 @@ class location:
         
     def __str__(self):
         return self.name
+    
+uknown = location(isAvailable=False, name="uknown")
 
+class Person:
+    def __init__(
+        self,
+        name="Henry",
+        age=12,
+        location=uknown,
+        health=100,
+        friends=[],
+        inventory=Container(items=[], size=[10]),
+        home="beng",
+        action="doing nothing",
+    ):
+        self.name = name
+        self.age = age
+        self.location = location
+        self.health = health
+        self.friends = friends
+        self.inventory = inventory
+        self.home = home
+        self.action = action
 
+kummelbyPizzeriaMenu = menu()
+kummelbyPizzeriaMenu.image = (
+"""
+####################
+##Pepperonipizza####
+####################
+######Calzone######
+####################
+#####barnpizza######
+####################
+####################
+####################
+####################
+####################
+"""
+)
+kummelbyPizzeriaChef = Person(name="Peter", age="52")
 school = location(isAvailable=True, name="school")
-kummelbyPizzeria = location(isAvailable=True, things=["a menu", "tables", "the chef", "wall mounted art pieace", "ice cream machine"], name="Kummelby pizzeria")
+kummelbyPizzeria = location(isAvailable=True, things={"menu": kummelbyPizzeriaMenu, "the chef": kummelbyPizzeriaChef}, name="Kummelby pizzeria")
 kjellOchCompany = location(isAvailable=True, name="Kjell och Company")
 locations = {"school": school, "kummelby pizzeria": kummelbyPizzeria, "kjell och company": kjellOchCompany}
 
@@ -29,7 +77,7 @@ locations = {"school": school, "kummelby pizzeria": kummelbyPizzeria, "kjell och
 
 
 
-class Person:
+class Player:
     def __init__(
         self,
         name="Henry",
@@ -49,6 +97,7 @@ class Person:
         self.inventory = inventory
         self.home = home
         self.action = action
+        self.view = ""
 
     def walkTo(self, destination):
         if destination in locations:
@@ -68,10 +117,15 @@ class Person:
             self.walkTo(input.split("walk to ")[1])
         if input == "look around":
             self.action = "looking around"
+        if input.startswith("look at"):
+            thing = input.split("look at ")[1]
+            if thing in self.location.things:
+                self.action = f"looking at {thing}"
+                self.view = self.location.things[thing].image
             
 
 
-player = Person()
+player = Player()
 
 
 def intro():
@@ -98,23 +152,22 @@ def render():
         + tools.convert_to_string([bar] * int(12 - (len(player.name) / 2)))
         + "_"
     )
-
+    status = f"You are {player.action}"
     if player.action.startswith("walking to") or player.action == "doing nothing":
         
         status = f"You are at {player.location}"
         player.action = "doing nothing"
         
     elif player.action.startswith("looking around"):
-        status = "You see " + (", ").join(player.location.things)
-    else:
-        status = f"You are {player.action}"
+        status = "You see: " + (", ").join(player.location.things)
+        
     return f"""
      {namebar}
     |health: {healthBar}        
                               |
     |{status}. 
      _________________________|  
-    """
+    """ + player.view
 
 
 def runGame():
