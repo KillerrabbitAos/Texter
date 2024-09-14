@@ -65,15 +65,17 @@ def intro():
 
 def render():
     indicator = "█░"
+    bar = "_"
     healthBar = (tools.convert_to_string(([indicator] * (int(player.health / 20)))))
     
-     
+    namebar = "_" + tools.convert_to_string([bar] * int(12 - (len(player.name)/2))) + player.name + tools.convert_to_string([bar] * int(12 - (len(player.name)/2))) + "_"
+    
     if player.action.startswith("walking to"):
         status = f"You are at {player.location}"
     else:
         status = f"You are {player.action}"
     return (f"""
-     _________________________
+     {namebar}
     |health: {healthBar}        
                               |
     |{status}. 
