@@ -12,8 +12,9 @@ def write(text):
 
 def draw(txt, totalTime: int, wait):
     import time
+
     for character in txt:
         print(character, end="""""", flush=True)
-        time.sleep(totalTime/len(txt))
+        time.sleep(totalTime / len(txt))
     time.sleep(wait)
     print("")
