@@ -5,19 +5,28 @@ import os
 def clear():
     return os.system("clear")
 
-
-class location:
-    def __init__(self, isAvailable: bool):
-        self.isAvailable = isAvailable
-
-
-locations = {"school": location(isAvailable=True)}
-
-
 class Container:
     def __init__(self, items, size):
         self.items = items
         self.size = size
+        
+class location:
+    def __init__(self, isAvailable: bool, things=["nothing",], name="random place"):
+        self.name = name
+        self.isAvailable = isAvailable
+        self.things = things
+        
+    def __str__(self):
+        return self.name
+
+
+school = location(isAvailable=True, name="school")
+kummelbyPizzeria = location(isAvailable=True, things=["a menu", "tables", "the chef", "wall mounted art pieace", "ice cream machine"], name="Kummelby pizzeria")
+kjellOchCompany = location(isAvailable=True, name="Kjell och Company")
+locations = {"school": school, "kummelby pizzeria": kummelbyPizzeria, "kjell och company": kjellOchCompany}
+
+
+
 
 
 class Person:
@@ -25,7 +34,7 @@ class Person:
         self,
         name="Henry",
         age=12,
-        location="school",
+        location=school,
         health=100,
         friends=[],
         inventory=Container(items=[], size=[10]),
@@ -46,7 +55,7 @@ class Person:
             if locations[destination].isAvailable:
                 self.action = f"walking to {destination}"
                 print(f"walking to {destination}.")
-                self.location = destination
+                self.location = locations[destination]
             else:
                 self.action = f"looking for {destination}"
 
@@ -57,6 +66,9 @@ class Person:
         input = input.lower()
         if input.startswith("walk to"):
             self.walkTo(input.split("walk to ")[1])
+        if input == "look around":
+            self.action = "looking around"
+            
 
 
 player = Person()
@@ -65,7 +77,7 @@ player = Person()
 def intro():
     player.name = input("Name: ")
     player.age = input("Age: ")
-    player.location = "School"
+    player.location = school
     player.health = 100
     clear()
     tools.draw(f"Welcome to Texter {player.name}!", 2, 0.5)
@@ -75,6 +87,9 @@ def render():
     indicator = "█░"
     bar = "_"
     healthBar = tools.convert_to_string(([indicator] * (int(player.health / 20))))
+    
+    if healthBar.endswith("░"):
+        healthBar = healthBar + "█"
 
     namebar = (
         "_"
@@ -84,9 +99,13 @@ def render():
         + "_"
     )
 
-    if player.action.startswith("walking to"):
+    if player.action.startswith("walking to") or player.action == "doing nothing":
+        
         status = f"You are at {player.location}"
         player.action = "doing nothing"
+        
+    elif player.action.startswith("looking around"):
+        status = "You see " + (", ").join(player.location.things)
     else:
         status = f"You are {player.action}"
     return f"""
