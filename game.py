@@ -86,6 +86,7 @@ def render():
 
     if player.action.startswith("walking to"):
         status = f"You are at {player.location}"
+        player.action = "doing nothing"
     else:
         status = f"You are {player.action}"
     return f"""
