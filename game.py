@@ -5,31 +5,42 @@ import os
 def clear():
     return os.system("clear")
 
+
 class thing:
     def __init__(self, image=""":)"""):
         self.image = image
+
 
 class Container:
     def __init__(self, items: dict, size: int):
         self.items = items
         self.size = size
 
-#things        
+
+# things
 class menu(thing):
     def __init__(self, items=["A menu:)"]):
         self.items = items
         pass
-        
+
+
 class location:
-    def __init__(self, isAvailable: bool, things:dict={"nothing": "nothing"}, name="random place"):
+    def __init__(
+        self,
+        isAvailable: bool,
+        things: dict = {"nothing": "nothing"},
+        name="random place",
+    ):
         self.name = name
         self.isAvailable = isAvailable
         self.things = things
-        
+
     def __str__(self):
         return self.name
-    
+
+
 uknown = location(isAvailable=False, name="uknown")
+
 
 class Person:
     def __init__(
@@ -52,9 +63,9 @@ class Person:
         self.home = home
         self.action = action
 
+
 kummelbyPizzeriaMenu = menu()
-kummelbyPizzeriaMenu.image = (
-"""
+kummelbyPizzeriaMenu.image = """
 ####################
 ##Pepperonipizza####
 ####################
@@ -67,23 +78,32 @@ kummelbyPizzeriaMenu.image = (
 ####################
 ####################
 """
-)
 kummelbyPizzeriaChef = Person(name="Peter", age="52")
 school = location(isAvailable=True, name="school")
-kummelbyPizzeria = location(isAvailable=True, things={"menu": kummelbyPizzeriaMenu, "the chef": kummelbyPizzeriaChef}, name="Kummelby pizzeria")
+kummelbyPizzeria = location(
+    isAvailable=True,
+    things={"menu": kummelbyPizzeriaMenu, "the chef": kummelbyPizzeriaChef},
+    name="Kummelby pizzeria",
+)
 kjellOchCompany = location(isAvailable=True, name="Kjell och Company")
-locations = {"school": school, "kummelby pizzeria": kummelbyPizzeria, "kjell och company": kjellOchCompany}
+locations = {
+    "school": school,
+    "kummelby pizzeria": kummelbyPizzeria,
+    "kjell och company": kjellOchCompany,
+}
 
 
-
-map = thing(image = """
+map = thing(
+    image="""
             
             
             
 ###map###
 
 
-""")
+"""
+)
+
 
 class Player:
     def __init__(
@@ -141,9 +161,6 @@ class Player:
                 self.location.things.pop(item)
             else:
                 self.action = f"looking for {item}"
-            
-                
-            
 
 
 player = Player()
@@ -162,7 +179,7 @@ def render():
     indicator = "█░"
     bar = "_"
     healthBar = tools.convert_to_string(([indicator] * (int(player.health / 20))))
-    
+
     if healthBar.endswith("░"):
         healthBar = healthBar + "█"
     inventory = (", ").join(player.inventory.items)
@@ -175,7 +192,6 @@ def render():
     )
     status = f"You are {player.action}"
     if player.action.startswith("walking to") or player.action == "doing nothing":
-        
         status = f"You are at {player.location}"
         player.action = "doing nothing"
     elif player.action.startswith("picking up"):
@@ -184,14 +200,17 @@ def render():
         status = f"you picked up the{item}"
     elif player.action.startswith("looking around"):
         status = "You see: " + (", ").join(player.location.things)
-        
-    return f"""
+
+    return (
+        f"""
      {namebar}
     |health: {healthBar}        
                                    | items in inventory: {inventory}
     |{status}. 
      ______________________________|  
-    """ + player.view
+    """
+        + player.view
+    )
 
 
 def runGame():
