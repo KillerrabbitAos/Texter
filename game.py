@@ -13,14 +13,15 @@ class Container:
     def __init__(self, items: dict, size: int):
         self.items = items
         self.size = size
-        
+
+#things        
 class menu(thing):
     def __init__(self, items=["A menu:)"]):
         self.items = items
         pass
         
 class location:
-    def __init__(self, isAvailable: bool, things=["nothing",], name="random place"):
+    def __init__(self, isAvailable: bool, things:dict={"nothing": "nothing"}, name="random place"):
         self.name = name
         self.isAvailable = isAvailable
         self.things = things
@@ -38,7 +39,7 @@ class Person:
         location=uknown,
         health=100,
         friends=[],
-        inventory=Container(items=[], size=[10]),
+        inventory=Container(items={}, size=[10]),
         home="beng",
         action="doing nothing",
     ):
@@ -75,7 +76,14 @@ locations = {"school": school, "kummelby pizzeria": kummelbyPizzeria, "kjell och
 
 
 
+map = thing(image = """
+            
+            
+            
+###map###
 
+
+""")
 
 class Player:
     def __init__(
@@ -85,7 +93,7 @@ class Player:
         location=school,
         health=100,
         friends=[],
-        inventory=Container(items=[], size=[10]),
+        inventory=Container(items={"map": map}, size=[10]),
         home="beng",
         action="doing nothing",
     ):
@@ -122,6 +130,19 @@ class Player:
             if thing in self.location.things:
                 self.action = f"looking at {thing}"
                 self.view = self.location.things[thing].image
+            elif thing in self.inventory.items:
+                self.action = f"looking at your {thing}"
+                self.view = self.inventory.items[thing].image
+        if input.startswith("pick up"):
+            item = input.split("pick up ")[1]
+            if item in self.location.things:
+                self.action = f"picking up {item}"
+                self.inventory.items.update({str(item): self.location.things[item]})
+                self.location.things.pop(item)
+            else:
+                self.action = f"looking for {item}"
+            
+                
             
 
 
@@ -144,12 +165,12 @@ def render():
     
     if healthBar.endswith("░"):
         healthBar = healthBar + "█"
-
+    inventory = (", ").join(player.inventory.items)
     namebar = (
         "_"
-        + tools.convert_to_string([bar] * int(12 - (len(player.name) / 2)))
+        + tools.convert_to_string([bar] * int(14.5 - (len(player.name) / 2)))
         + player.name
-        + tools.convert_to_string([bar] * int(12 - (len(player.name) / 2)))
+        + tools.convert_to_string([bar] * int(14.5 - (len(player.name) / 2)))
         + "_"
     )
     status = f"You are {player.action}"
@@ -157,16 +178,19 @@ def render():
         
         status = f"You are at {player.location}"
         player.action = "doing nothing"
-        
+    elif player.action.startswith("picking up"):
+        item = player.action.split("picking up")[1]
+        player.action = "doing nothing"
+        status = f"you picked up the{item}"
     elif player.action.startswith("looking around"):
         status = "You see: " + (", ").join(player.location.things)
         
     return f"""
      {namebar}
     |health: {healthBar}        
-                              |
+                                   | items in inventory: {inventory}
     |{status}. 
-     _________________________|  
+     ______________________________|  
     """ + player.view
 
 
