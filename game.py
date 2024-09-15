@@ -154,11 +154,20 @@ class Player:
         input = input.lower()
         if input.startswith("walk to"):
             self.walkTo(input.split("walk to ")[1])
+            self.view = ""
         if input == "look around":
             self.action = "looking around"
+            self.view = ""
         if input.startswith("look at"):
-            thing = input.split("look at ")[1]
-            if thing in self.location.things:
+            thing = input.split(" ")[-1]
+            if "my" in input:
+                if thing in self.inventory.items:
+                    self.action = f"looking at your {thing}"
+                    self.view = self.inventory.items[thing].image
+                else:
+                    self.action = f"Trying to leave a {thing}"
+                    self.view = ""
+            elif thing in self.location.things:
                 self.action = f"looking at {thing}"
                 self.view = self.location.things[thing].image
             elif thing in self.inventory.items:
@@ -172,6 +181,16 @@ class Player:
                 self.location.things.pop(item)
             else:
                 self.action = f"looking for {item}"
+        if input.startswith("leave"):
+            item = input.split("leave ")[1]
+            if item in self.inventory.items:
+                self.action = f"leaving {item}"
+                self.location.things.update({str(item): self.inventory.items[item]})
+                self.inventory.items.pop(item)
+                if "nothing" in self.location.things:
+                    self.location.things.pop("nothing")
+            else:
+                self.action = f"missing {item}"
 
 
 player = Player()
@@ -205,10 +224,17 @@ def render():
     if player.action.startswith("walking to") or player.action == "doing nothing":
         status = f"You are at {player.location}"
         player.action = "doing nothing"
+    elif player.action.startswith("Trying to leave a "):
+        item = player.action.split("Trying to leave a ")[1]
+        status = f"You don have {item}"
     elif player.action.startswith("picking up"):
-        item = player.action.split("picking up")[1]
+        item = player.action.split("picking up ")[1]
         player.action = "doing nothing"
-        status = f"you picked up the{item}"
+        status = f"you picked up the {item}"
+    elif player.action.startswith("leaving"):
+        item = player.action.split("leaving ")[1]
+        player.action = "doing nothing"
+        status = f"You left the {item}"
     elif player.action.startswith("looking around"):
         status = "You see: " + (", ").join(player.location.things)
 
@@ -232,3 +258,4 @@ def runGame():
         print(render())
         player.prompt(input(": "))
         clear()
+        
