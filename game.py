@@ -53,6 +53,7 @@ class Person:
         inventory=Container(items={}, size=[10]),
         home="beng",
         action="doing nothing",
+        image="""hehe"""
     ):
         self.name = name
         self.age = age
@@ -62,6 +63,7 @@ class Person:
         self.inventory = inventory
         self.home = home
         self.action = action
+        self.image=image
 
 
 kummelbyPizzeriaMenu = menu()
@@ -78,7 +80,16 @@ kummelbyPizzeriaMenu.image = """
 ####################
 ####################
 """
-kummelbyPizzeriaChef = Person(name="Peter", age="52")
+kummelbyPizzeriaChef = Person(name="Peter", age="52", image=""" 
+###### 
+ ### #  
+ #####  
+  # ##  
+  ####   
+##O  O##  
+ # --  #  
+  ####   
+""")
 school = location(isAvailable=True, name="school")
 kummelbyPizzeria = location(
     isAvailable=True,
